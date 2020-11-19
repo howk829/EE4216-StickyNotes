@@ -17,19 +17,28 @@
       <b-button
         variant="white"
         class="editbtn p-1"
-        v-on:click="edit(note.index)"
+        v-on:click="editNotes(note.index)"
       >
         <b-icon-pencil />
       </b-button>
-      <h5 class="textarea">{{ note.content }}</h5>
+      <p class="textarea" :style="{ fontSize: note.fontSize }">
+        {{ note.content }}
+      </p>
     </vue-draggable-resizable>
 
     <b-modal v-model="addModal.show" id="addModal" title="Add Notes">
+      <select
+        class="custom-select custom-select-sm mb-2"
+        style="width:auto; float: right; position: relative;"
+        v-model="addModal.fontSize"
+      >
+        <option value="16px" selected="selected">16px</option>
+        <option value="20px">20px</option>
+        <option value="24px">24px</option>
+      </select>
       <input
-        class="mb-2"
+        class="mr-2 mb-1"
         type="color"
-        id="favcolor"
-        name="favcolor"
         value="#FFFFFF"
         v-model="addModal.colorValue"
         style="float: right;"
@@ -49,17 +58,38 @@
         >
       </template>
     </b-modal>
-    <!-- <b-modal
-      v-model="duptopic.modelShow"
-      id="duptopic"
-      :title="$t('createTopicForm.duptopic')"
-      @hide="hideModel"
-    >
+
+    <b-modal v-model="editModal.show" id="editModal" title="Edit Notes">
+      <select
+        class="custom-select custom-select-sm mb-2"
+        style="width:auto; float: right; position: relative;"
+        v-model="editModal.fontSize"
+      >
+        <option value="16px" selected="selected">16px</option>
+        <option value="20px">20px</option>
+        <option value="24px">24px</option>
+      </select>
+      <input
+        class="mr-2 mb-1"
+        type="color"
+        v-model="editModal.colorValue"
+        style="float: right;"
+      />
+      <b-form-textarea
+        id="textarea"
+        v-model="editModal.content"
+        placeholder="Enter something..."
+        rows="3"
+        max-rows="6"
+      ></b-form-textarea>
+
       <template v-slot:modal-footer>
-        <b-button size="sm" @click="hideModel()"> </b-button>
-        <b-button size="sm" variant="primary" @click="handleOk()"> </b-button>
+        <b-button size="sm" @click="hideEditModel()">Cancel</b-button>
+        <b-button size="sm" variant="primary" @click="handleEdit()"
+          >Edit Note</b-button
+        >
       </template>
-    </b-modal> -->
+    </b-modal>
   </div>
 </template>
 
@@ -84,14 +114,18 @@ export default {
     addModal: {
       show: false,
       content: null,
-      colorValue: "#FFFFFF"
+      colorValue: "#FFFFFF",
+      fontSize: "16px"
     },
-    showEditModal: false
+    editModal: {
+      show: false,
+      content: null,
+      colorValue: null,
+      fontSize: null,
+      index: null
+    }
   }),
   methods: {
-    edit() {
-      console.log("editing");
-    },
     del(index) {
       console.log(index);
       if (index > -1) {
@@ -101,18 +135,41 @@ export default {
     addNotes() {
       this.addModal.show = true;
     },
+    editNotes(index) {
+      this.editModal.show = true;
+      this.editModal.content = this.notes[index].content;
+      this.editModal.colorValue = this.notes[index].color;
+      this.editModal.fontSize = this.notes[index].fontSize;
+      this.editModal.index = index;
+    },
     hideAddModel() {
       this.addModal.show = false;
+    },
+    hideEditModel() {
+      this.editModal.show = false;
+      this.editModal.show = false;
+      this.editModal.content = null;
+      this.editModal.colorValue = null;
+      this.editModal.fontSize = null;
     },
     handleAdd() {
       const note = {
         content: this.addModal.content,
         index: this.notes.length,
-        color: this.addModal.colorValue
+        color: this.addModal.colorValue,
+        fontSize: this.addModal.fontSize
       };
       this.notes.push(note);
       this.addModal.show = false;
       this.addModal.content = null;
+      this.addModal.colorValue = "#FFFFFF";
+      this.addModal.fontSize = "16px";
+    },
+    handleEdit() {
+      this.notes[this.editModal.index].content = this.editModal.content;
+      this.notes[this.editModal.index].color = this.editModal.colorValue;
+      this.notes[this.editModal.index].fontSize = this.editModal.fontSize;
+      this.hideEditModel();
     }
   }
 };
