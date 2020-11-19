@@ -1,10 +1,9 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view />
+    <router-view name="header"></router-view>
+    <main class="row mx-0 flex-grow-1">
+      <router-view />
+    </main>
   </div>
 </template>
 
