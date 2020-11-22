@@ -2,10 +2,31 @@
   <div id="app">
     <router-view name="header"></router-view>
     <main class="row mx-0 flex-grow-1">
-      <router-view />
+      <fade-transition origin="center" mode="out-in" :duration="250">
+        <router-view></router-view>
+      </fade-transition>
     </main>
   </div>
 </template>
+
+<script>
+import { FadeTransition } from "vue2-transitions";
+
+export default {
+  components: {
+    FadeTransition
+  },
+  created() {
+    if (!this.$store.user) {
+      this.$router.push("/login");
+    }
+    window.addEventListener("beforeunload", this.handler);
+  },
+  methods: {
+    handler: function handler() {}
+  }
+};
+</script>
 
 <style>
 #app {

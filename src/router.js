@@ -2,12 +2,26 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Dashboard from "./views/Dashboard.vue";
 import Header from "./views/Header.vue";
+import Login from "./views/Login.vue";
+import Register from "./views/Register.vue";
 
 Vue.use(VueRouter);
 
 const routerOptions = {
   mode: "history",
-  routes: [{ path: "/", name: "root", components: { default: Dashboard } }]
+  routes: [
+    { path: "/", name: "root", components: { default: Dashboard } },
+    {
+      path: "/login",
+      name: "login",
+      components: { default: Login }
+    },
+    {
+      path: "/register",
+      name: "register",
+      components: { default: Register }
+    }
+  ]
 };
 
 routerOptions.routes.forEach(route => {

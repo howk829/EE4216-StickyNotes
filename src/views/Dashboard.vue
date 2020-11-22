@@ -4,29 +4,51 @@
       ><b-icon-plus class="icon rounded-circle" variant="light"
     /></a>
 
-    <vue-draggable-resizable
-      :w="240"
-      :h="240"
-      v-for="note in notes"
-      :key="note.index"
-      :style="{ backgroundColor: note.color }"
-    >
-      <b-button variant="white" class="delbtn p-1" v-on:click="del(note.index)">
-        <b-icon-x-circle />
-      </b-button>
-      <b-button
-        variant="white"
-        class="editbtn p-1"
-        v-on:click="editNotes(note.index)"
-      >
-        <b-icon-pencil />
-      </b-button>
-      <p class="textarea" :style="{ fontSize: note.fontSize }">
-        {{ note.content }}
-      </p>
-    </vue-draggable-resizable>
+    <a ref="button" class="saveTopicBtn" @click="saveNotes()"
+      ><b-icon-cloud-arrow-up class="icon rounded-circle" variant="light"
+    /></a>
 
-    <b-modal v-model="addModal.show" id="addModal" title="Add Notes">
+    <b-overlay :show="loading" rounded="sm">
+      <vue-draggable-resizable
+        v-for="note in notes"
+        :key="note.index"
+        :style="{
+          backgroundColor: note.color
+        }"
+        :x="note.position.x"
+        :y="note.position.y"
+        :w="note.position.width"
+        :h="note.position.height"
+        ref="dr"
+        @dragging="onDragging(note.index)"
+        @resizing="onResizing(note.index)"
+      >
+        <b-button
+          variant="white"
+          class="delbtn p-1"
+          v-on:click="del(note.index)"
+        >
+          <b-icon-x-circle />
+        </b-button>
+        <b-button
+          variant="white"
+          class="editbtn p-1"
+          v-on:click="editNotes(note.index)"
+        >
+          <b-icon-pencil />
+        </b-button>
+        <p class="textarea" :style="{ fontSize: note.fontSize }">
+          {{ note.content }}
+        </p>
+      </vue-draggable-resizable>
+    </b-overlay>
+
+    <b-modal
+      v-model="addModal.show"
+      @hide="addModal.show = false"
+      id="addModal"
+      title="Add Notes"
+    >
       <select
         class="custom-select custom-select-sm mb-2"
         style="width:auto; float: right; position: relative;"
@@ -59,7 +81,12 @@
       </template>
     </b-modal>
 
-    <b-modal v-model="editModal.show" id="editModal" title="Edit Notes">
+    <b-modal
+      v-model="editModal.show"
+      @hide="editModal.show = false"
+      id="editModal"
+      title="Edit Notes"
+    >
       <select
         class="custom-select custom-select-sm mb-2"
         style="width:auto; float: right; position: relative;"
@@ -94,7 +121,7 @@
 </template>
 
 <script>
-// import axios from "axios"
+import axios from "axios";
 // import VueResizable from 'vue-resizable'
 // import VueDragResize from "vue-drag-resize";
 import VueDraggableResizable from "vue-draggable-resizable";
@@ -111,6 +138,7 @@ export default {
   },
   data: () => ({
     notes: [],
+    index: 0,
     addModal: {
       show: false,
       content: null,
@@ -123,14 +151,53 @@ export default {
       colorValue: null,
       fontSize: null,
       index: null
-    }
+    },
+    loading: false
   }),
+  mounted() {
+    if (localStorage.notes != null) {
+      this.notes = JSON.parse(localStorage.notes);
+      console.log(this.notes);
+    }
+  },
   methods: {
+    onDragging(index) {
+      const bodyleft = this.$el.getBoundingClientRect().left;
+      const bodytop = this.$el.getBoundingClientRect().top;
+
+      const x = this.$refs.dr[index].$el.getBoundingClientRect().left;
+      const y = this.$refs.dr[index].$el.getBoundingClientRect().top;
+
+      this.notes[index].position.x = x - bodyleft;
+      this.notes[index].position.y = y - bodytop;
+
+      console.log(x);
+      console.log(y);
+    },
+    onResizing(index) {
+      const height = this.$refs.dr[index].$el.clientHeight;
+      const width = this.$refs.dr[index].$el.clientWidth;
+      this.notes[index].position.height = height;
+      this.notes[index].position.width = width;
+      console.log(height);
+      console.log(width);
+    },
+    async saveNotes() {
+      await axios
+        .put("http://54.161.118.5:8080/api/memo", this.notes)
+        .then(res => {
+          console.log(note);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     del(index) {
       console.log(index);
       if (index > -1) {
         this.notes.splice(index, 1);
       }
+      localStorage.notes = JSON.stringify(this.notes);
     },
     addNotes() {
       this.addModal.show = true;
@@ -152,15 +219,59 @@ export default {
       this.editModal.colorValue = null;
       this.editModal.fontSize = null;
     },
-    handleAdd() {
-      const note = {
-        content: this.addModal.content,
-        index: this.notes.length,
-        color: this.addModal.colorValue,
-        fontSize: this.addModal.fontSize
+    async handleAdd() {
+      const defaultPosition = {
+        height: 240,
+        width: 240,
+        top: 0,
+        left: 0
       };
-      this.notes.push(note);
-      this.addModal.show = false;
+
+      const memoDetails = {
+        memoID: this.notes.length,
+        content: this.addModal.content,
+        userID: "123213",
+        color: this.addModal.colorValue,
+        fontSize: this.addModal.fontSize,
+        positionHeight: defaultPosition.height,
+        positionWidth: defaultPosition.width,
+        positionTop: defaultPosition.top,
+        positionLeft: defaultPosition.left
+      };
+      await axios
+        .post("http://54.161.118.5:8080/api/memo", memoDetails)
+        .then(res => {
+          console.log(res.data);
+          const {
+            memoID,
+            content,
+            color,
+            font,
+            height,
+            width,
+            top,
+            left
+          } = res.data;
+          console.log(memoID);
+          const note = {
+            index: memoID,
+            content: content,
+            color: color,
+            fontSize: font,
+            position: {
+              height: height,
+              width: width,
+              top: top,
+              left: left
+            }
+          };
+          console.log(note);
+          this.notes.push(note);
+          this.addModal.show = false;
+        })
+        .catch(err => {
+          console.log(err);
+        });
       this.addModal.content = null;
       this.addModal.colorValue = "#FFFFFF";
       this.addModal.fontSize = "16px";
@@ -183,13 +294,27 @@ export default {
   margin-left: -15px;
 }
 
+a.saveTopicBtn {
+  position: fixed;
+  font-size: 50px;
+  right: 80px;
+  bottom: 10px;
+  z-index: 9;
+}
+
+a.saveTopicBtn .icon {
+  background-color: #f1b200 !important;
+  cursor: pointer;
+}
+
 a.addTopicBtn {
   position: fixed;
-  font-size: 40px;
+  font-size: 50px;
   right: 10px;
   bottom: 10px;
   z-index: 9;
 }
+
 a.addTopicBtn .icon {
   background-color: #f1b200 !important;
   cursor: pointer;

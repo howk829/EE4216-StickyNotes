@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "vue-cli-service serve --port 5050",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
@@ -14,7 +14,9 @@
     "vue-drag-resize": "^1.4.2",
     "vue-draggable-resizable": "^2.2.0",
     "vue-router": "^3.2.0",
-    "vuex": "^3.4.0"
+    "vue2-transitions": "^0.3.0",
+    "vuex": "^3.4.0",
+    "vuex-persistedstate": "^4.0.0-beta.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
