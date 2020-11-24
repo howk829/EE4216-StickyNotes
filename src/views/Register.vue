@@ -35,7 +35,7 @@
         <b-button
           pill
           style="background-color: #f1b200"
-          type="submit"
+          @click="onSubmit"
           class="mt-3"
           variant="primary"
           >Register</b-button
@@ -79,10 +79,13 @@ export default {
       this.form.errors = [];
       await axios
         .post("http://54.161.118.5:8080/api/register/", user)
-        .then(data => {
-          const { user } = data;
-          if (user) {
+        .then(res => {
+          if (res) {
             this.$router.push("/login");
+            this.$root.$bvToast.toast("Resgistered", {
+              title: "Success",
+              variant: "success"
+            });
           }
         })
         .catch(err => {

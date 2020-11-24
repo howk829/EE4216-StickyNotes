@@ -165,7 +165,7 @@ export default {
     async getData() {
       this.loading = true;
       await axios
-        .get("http://54.161.118.5:8080/api/memo/" + "123")
+        .get("http://54.161.118.5:8080/api/memo/" + this.$store.state.userID)
         .then(res => {
           res.data.forEach(response => {
             const {
@@ -178,7 +178,9 @@ export default {
               width,
               top,
               left,
-              zIndex
+              zIndex,
+              orderIndex,
+              fix
             } = response;
 
             const note = {
@@ -191,7 +193,9 @@ export default {
               positionWidth: width,
               positionTop: top,
               positionLeft: left,
-              zIndex: zIndex
+              zIndex: zIndex,
+              orderIndex: orderIndex,
+              fix: fix
             };
             this.notes.push(note);
           });
@@ -288,16 +292,24 @@ export default {
         zIndex: 1
       };
       const memoDetails = {
-        memoID: this.notes.length,
+        memoID: this.notes.length + 1,
         content: this.addModal.content,
-        userID: "123",
+        userID: this.$store.state.userID,
         color: this.addModal.colorValue,
         fontSize: this.addModal.fontSize,
         positionHeight: defaultPosition.height.toString(),
         positionWidth: defaultPosition.width.toString(),
-        positionTop: defaultPosition.top.toString(),
-        positionLeft: defaultPosition.left.toString(),
-        zIndex: defaultPosition.zIndex.toString()
+        positionTop: (
+          defaultPosition.top +
+          (defaultPosition.height * (this.notes.length + 1)) / 10
+        ).toString(),
+        positionLeft: (
+          defaultPosition.left +
+          (defaultPosition.width * (this.notes.length + 1)) / 10
+        ).toString(),
+        zIndex: defaultPosition.zIndex.toString(),
+        orderIndex: 0,
+        fix: false
       };
 
       await axios
@@ -314,7 +326,9 @@ export default {
             width,
             top,
             left,
-            zIndex
+            zIndex,
+            orderIndex,
+            fix
           } = res.data;
 
           console.log(memoID);
@@ -329,7 +343,9 @@ export default {
             positionWidth: width.toString(),
             positionTop: top.toString(),
             positionLeft: left.toString(),
-            zIndex: zIndex.toString()
+            zIndex: zIndex.toString(),
+            orderIndex: orderIndex,
+            fix: fix
           };
           console.log(note);
           this.notes.push(note);
@@ -347,12 +363,24 @@ export default {
       this.addModal.colorValue = "#FFFFFF";
       this.addModal.fontSize = "16px";
     },
-    handleEdit() {
+    async handleEdit() {
       const index = this.editModal.index;
-
       this.notes[index].content = this.editModal.content;
       this.notes[index].color = this.editModal.colorValue;
       this.notes[index].fontSize = this.editModal.fontSize;
+
+      await axios
+        .put(
+          "http://54.161.118.5:8080/api/memo/" + this.notes[index].memoID,
+          this.notes[index]
+        )
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+
       this.hideEditModel();
     }
   }

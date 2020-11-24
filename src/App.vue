@@ -17,9 +17,9 @@ export default {
     FadeTransition
   },
   created() {
-    // if (!this.$store.user) {
-    //   this.$router.push("/login");
-    // }
+    if (this.$store.state.userID == null) {
+      this.$router.push("/login");
+    }
     window.addEventListener("beforeunload", this.handler);
   },
   methods: {

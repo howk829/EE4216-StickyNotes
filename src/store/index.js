@@ -7,9 +7,24 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   plugins: [createPersistedState()],
   state: {
-    notes: null
+    notes: null,
+    userID: null
   },
-  mutations: {},
-  actions: {},
+  mutations: {
+    LOGIN: (state, { userID }) => {
+      Vue.set(state, "userID", userID);
+    },
+    LOGOUT: state => {
+      state.userID = null;
+    }
+  },
+  actions: {
+    LOGIN({ commit }, payload) {
+      commit("LOGIN", payload);
+    },
+    LOGOUT({ commit }) {
+      commit("LOGOUT");
+    }
+  },
   modules: {}
 });

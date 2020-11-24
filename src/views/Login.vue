@@ -16,10 +16,18 @@
           placeholder="Password"
         ></b-form-input>
 
+        <b-form-invalid-feedback :state="form.errors.length == 0">
+          <ul class="form-errors">
+            <li v-for="(error, index) in form.errors" :key="index">
+              {{ error }}
+            </li>
+          </ul>
+        </b-form-invalid-feedback>
+
         <b-button
           pill
           style="background-color: #f1b200"
-          type="submit"
+          @click="onSubmit"
           class="mt-3"
           variant="primary"
           >Login</b-button
@@ -36,6 +44,7 @@
 </template>
 <script>
 import axios from "axios";
+import store from "../store";
 
 export default {
   data: () => ({
@@ -56,14 +65,18 @@ export default {
       await axios
         .post("http://54.161.118.5:8080/api/login/", user)
         .then(res => {
-          const { user } = res;
-          if (user) {
+          console.log(res);
+          const { userID } = res.data;
+          if (res) {
+            store.dispatch("LOGIN", { userID });
+            console.log(this.$store.state.userID);
+
             this.$router.push("/");
           }
         })
         .catch(err => {
-          if (err.code && err.code == 400) {
-            this.form.errors.push(err.message);
+          if (err) {
+            this.form.errors.push("Wrong username or password");
             return;
           }
         });
