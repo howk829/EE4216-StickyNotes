@@ -1,7 +1,7 @@
 <template>
-  <div id="app">
+  <div id="app" class="d-flex flex-column">
     <router-view name="header"></router-view>
-    <main class="row mx-0 flex-grow-1">
+    <main>
       <fade-transition origin="center" mode="out-in" :duration="250">
         <router-view></router-view>
       </fade-transition>
@@ -17,9 +17,9 @@ export default {
     FadeTransition
   },
   created() {
-    if (!this.$store.user) {
-      this.$router.push("/login");
-    }
+    // if (!this.$store.user) {
+    //   this.$router.push("/login");
+    // }
     window.addEventListener("beforeunload", this.handler);
   },
   methods: {
@@ -35,6 +35,10 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+
+#content {
+  background-image: url("~@/assets/background.jpg");
 }
 
 #nav {

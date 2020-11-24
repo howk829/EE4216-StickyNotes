@@ -11,7 +11,7 @@
         <!-- Right aligned nav items -->
         <b-navbar-nav align="left" class="ml-auto">
           <b-nav-item>
-            Sign In
+            Sign Out
           </b-nav-item>
           <b-nav-item-dropdown right v-if="this.$store.state.user">
             <!-- Using 'button-content' slot -->

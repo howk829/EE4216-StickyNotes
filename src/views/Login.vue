@@ -2,17 +2,28 @@
   <div class="container col-12 col-md-6 my-3">
     <b-card class="mt-3" header="Login" variant="primary">
       <b-form>
-        <b-form-input required v-model="username" placeholder="Username"></b-form-input>
+        <b-form-input
+          required
+          v-model="form.username"
+          placeholder="Username"
+        ></b-form-input>
 
         <b-form-input
-          v-model="password"
+          v-model="form.password"
           class="mt-2"
           type="password"
           required
           placeholder="Password"
         ></b-form-input>
 
-        <b-button type="submit" class="mt-3" variant="primary">Login</b-button>
+        <b-button
+          pill
+          style="background-color: #f1b200"
+          type="submit"
+          class="mt-3"
+          variant="primary"
+          >Login</b-button
+        >
 
         <b-row class="mt-3">
           <b-col cols="12" class="text-right">

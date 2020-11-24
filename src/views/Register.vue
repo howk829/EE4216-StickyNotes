@@ -32,7 +32,12 @@
           </ul>
         </b-form-invalid-feedback>
 
-        <b-button type="submit" class="mt-3" variant="primary"
+        <b-button
+          pill
+          style="background-color: #f1b200"
+          type="submit"
+          class="mt-3"
+          variant="primary"
           >Register</b-button
         >
       </b-form>
