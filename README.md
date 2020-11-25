@@ -3,7 +3,7 @@
 A stickynotes appllication using Vue CLI
 
 # Features
-- [x] Support multiple user  
+- [x] Support multiple users  
 - [x] Basic authentication using username and password  
 - [x] Baisc CRUD operations  
 - [x] Notes are draggable and resizable  
