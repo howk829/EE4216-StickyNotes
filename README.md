@@ -3,17 +3,17 @@
 A stickynotes appllication using Vue CLI
 
 # Features
-[x] Support multiple user
-[x] Basic authentication using username and password
-[x] Baisc CRUD operations
-[x] Notes are draggable and resizable
-[x] Adjusting colors and font sizes of notes
+- [x] Support multiple user  
+- [x] Basic authentication using username and password  
+- [x] Baisc CRUD operations  
+- [x] Notes are draggable and resizable  
+- [x] Adjusting colors and font sizes of notes  
 
 # Library used
-Bootstrap-Vue: Front-end components 
-Vue-draggable-resizable: draggable and resizable notes
-Vuex: local storage
-VueRouter: route to different components
+Bootstrap-Vue: Front-end components   
+Vue-draggable-resizable: draggable and resizable notes  
+Vuex: local storage  
+VueRouter: route to different components  
 
 
 
