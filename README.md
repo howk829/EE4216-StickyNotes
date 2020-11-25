@@ -1,4 +1,4 @@
-# Stickknotes
+# Stickynotes
 
 A stickynotes appllication using Vue CLI
 
