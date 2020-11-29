@@ -1,8 +1,11 @@
 # Stickynotes
 
-A stickynotes appllication using Vue CLI
-Using Java Spring as backend server
-Deploy using AWS EC2 instance and S3 bucket
+A stickynotes appllication using Vue CLI  
+Using Java Spring as backend server  
+Deploy using AWS EC2 instance and S3 bucket  
+
+# Project Url (Expire on 31/12/2020)
+http://ee4221-project-55239915.s3-website-us-east-1.amazonaws.com/
 
 # Features
 - [x] Support multiple users  
@@ -17,6 +20,15 @@ Vue-draggable-resizable: draggable and resizable notes
 Vuex: local storage  
 VueRouter: route to different components  
 
+# Demo
+#### Create notes, can choose colour and font size
+<img src="https://github.com/howk829/EE4216-StickyNotes/blob/main/ezgif-6-8d816d1c0b40.gif">  
+
+#### Draggable and resizable
+<img src="https://github.com/howk829/EE4216-StickyNotes/blob/main/ezgif-6-a6e17ee3fc40.gif">  
+ 
+#### Edit content, colour and font size
+<img src="https://github.com/howk829/EE4216-StickyNotes/blob/main/ezgif-6-a9e058de4f65.gif">
 
 
 ## Project setup
