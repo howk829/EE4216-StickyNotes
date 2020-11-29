@@ -1,6 +1,8 @@
 # Stickynotes
 
 A stickynotes appllication using Vue CLI
+Using Java Spring as backend server
+Deploy using AWS EC2 instance and S3 bucket
 
 # Features
 - [x] Support multiple users  
