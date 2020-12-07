@@ -4,7 +4,7 @@ A stickynotes appllication using Vue CLI
 Using Java Spring as backend server  
 Deploy using AWS EC2 instance and S3 bucket  
 
-# Project Url (Expire on 31/12/2020)
+# Project Url (Expired)
 http://ee4221-project-55239915.s3-website-us-east-1.amazonaws.com/
 
 # Features
